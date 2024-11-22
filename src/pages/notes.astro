@@ -1,0 +1,67 @@
+---
+import { db } from '../db/client';
+import { notesTable } from '../db/schema';
+import Layout from '../layouts/default.astro';
+
+const notes = await db.select().from(notesTable);
+---
+
+<Layout title="Public Thank You Notes">
+	<h1>Public Thank You Notes</h1>
+
+	<section class="notes">
+		{
+			notes.map((note) => {
+				return (
+					<div class="note">
+						<h2>{note.sender} sent a thank you note:</h2>
+						<p>{note.body}</p>
+					</div>
+				);
+			})
+		}
+	</section>
+</Layout>
+
+<style>
+	.notes {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		inline-size: 90dvi;
+		justify-content: center;
+		margin-inline: auto;
+	}
+
+	.note {
+		background-color: #ffffcc; /* Post-it yellow */
+		border: 1px solid #ddd;
+		padding: 20px;
+		box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+		border-radius: 0.25rem; /* Slightly rounded corners */
+		inline-size: 250px; /* Adjust width as needed */
+		min-block-size: 180px;
+
+		h2 {
+			font-family: 'Caveat', cursive;
+			font-optical-sizing: auto;
+			font-size: 1.75em;
+			font-style: normal;
+			font-weight: 900;
+			line-height: 1.1;
+			margin: 0;
+			color: #333; /* Darker heading color */
+		}
+
+		p {
+			font-family: 'Caveat', cursive;
+			font-optical-sizing: auto;
+			font-size: 1.5em;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 1.45;
+			margin: 0.5rem 0 0;
+			color: #555; /* Slightly lighter text color */
+		}
+	}
+</style>

@@ -1,0 +1,94 @@
+---
+import {
+	SignedIn,
+	SignedOut,
+	UserButton,
+	SignInButton,
+} from '@clerk/astro/components';
+
+export interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<header>
+			<a href="/" rel="home">Thank You Notes</a>
+
+			<nav>
+				<SignedOut>
+					<SignInButton mode="modal" />
+				</SignedOut>
+				<SignedIn>
+					<a href="/notes">Public Notes</a>
+					<UserButton />
+				</SignedIn>
+			</nav>
+		</header>
+		<main>
+			<slot />
+		</main>
+	</body>
+</html>
+
+<style>
+	body {
+		font-family: sans-serif;
+		background-color: #f4f4f4;
+		display: flex;
+		flex-direction: column;
+		justify-content: start;
+		align-items: center;
+		min-height: 100vh;
+		margin: 0;
+		overflow-x: hidden;
+	}
+
+	header {
+		align-items: center;
+		background-color: #fff;
+		border-radius: 8px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		display: flex;
+		justify-content: space-between;
+		inline-size: 90dvi;
+		margin-block-end: 4rem;
+		margin-block-start: 2rem;
+		padding: 20px;
+
+		a {
+			color: inherit;
+			font-weight: bold;
+			text-decoration: none;
+		}
+	}
+
+	main {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		align-items: center;
+	}
+
+	:is(h1, h2) {
+		margin: 0;
+	}
+</style>

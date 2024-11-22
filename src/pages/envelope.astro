@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/default.astro';
+---
+
+<Layout title="envelope">
+	<div class="container">
+		<div class="envelope">
+			<img
+				src="https://res.cloudinary.com/jlengstorf/image/upload/v1728426585/wdc/gratitude/envelope-flap.png"
+				alt=""
+				class="image-flap"
+			/>
+			<img
+				src="https://res.cloudinary.com/jlengstorf/image/upload/v1728426588/wdc/gratitude/envelope.png"
+				alt="envelope"
+				class="image-envelope"
+			/>
+			<img
+				src="https://res.cloudinary.com/jlengstorf/image/upload/v1728426583/wdc/gratitude/heart.png"
+				alt="heart"
+				class="image-heart"
+			/>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.container {
+		animation: 1.2s yeet-move ease-in forwards;
+		animation-delay: 4s;
+		overflow: hidden;
+		top: 0;
+		left: 0;
+		padding: 5rem;
+		position: relative;
+	}
+
+	.envelope {
+		animation: 3.4s 2s yeet ease-in-out forwards;
+		aspect-ratio: 793 / 1200;
+		position: relative;
+		inline-size: 320px;
+		transform-origin: center 80%;
+
+		.image-envelope,
+		.image-flap {
+			inline-size: 100%;
+			inset-block-end: 0;
+			inset-inline: 0;
+			position: absolute;
+		}
+
+		.image-envelope {
+			z-index: 10;
+		}
+
+		.image-flap {
+			animation: 1.6s 0.1s fold ease-in-out forwards;
+			z-index: 5;
+		}
+
+		.image-heart {
+			animation: 2s drop ease-in-out forwards;
+			inline-size: 57.25%;
+			inset-block-start: 0;
+			inset-inline-start: 21.375%;
+			position: absolute;
+			z-index: 1;
+		}
+	}
+
+	@keyframes drop {
+		to {
+			transform: translateY(185%);
+		}
+	}
+
+	@keyframes fold {
+		100% {
+			display: none;
+		}
+	}
+
+	@keyframes yeet {
+		100% {
+			rotate: 4turn;
+		}
+	}
+
+	@keyframes yeet-move {
+		100% {
+			left: 1000px;
+			top: -100px;
+			scale: 0.1;
+		}
+	}
+</style>

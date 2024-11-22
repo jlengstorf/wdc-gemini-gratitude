@@ -1,16 +1,191 @@
 ---
+import { actions } from 'astro:actions';
+import Layout from '../layouts/default.astro';
 
+// @ts-expect-error can't get types to pick up from Clerk Astro
+const user = await Astro.locals.currentUser();
+
+const sender = user.firstName + ' ' + user.lastName;
+
+console.log({ sender });
+
+const result = Astro.getActionResult(actions.notes.create);
+
+console.log({ result });
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Tell someone you're grateful for them">
+	{result ? (
+		<>
+			<div class="container">
+				<div class="envelope">
+					<img
+						src="https://res.cloudinary.com/jlengstorf/image/upload/v1728426585/wdc/gratitude/envelope-flap.png"
+						alt=""
+						class="image-flap"
+					/>
+					<img
+						src="https://res.cloudinary.com/jlengstorf/image/upload/v1728426588/wdc/gratitude/envelope.png"
+						alt="envelope"
+						class="image-envelope"
+					/>
+					<img
+						src="https://res.cloudinary.com/jlengstorf/image/upload/v1728426583/wdc/gratitude/heart.png"
+						alt="heart"
+						class="image-heart"
+					/>
+				</div>
+			</div>
+
+			<p style="margin-block-start: 2rem; text-align: center;">
+				<a href="/notes">view all public notes</a>
+			</p>
+		</>
+	) : (
+	<h1>Tell someone you're grateful for them</h1>
+
+	<form action={actions.notes.create} method="POST">
+		<label for="recipient">To:</label>
+		<input type="text" id="recipient" name="recipient" required />
+
+		<label for="subject">Subject:</label>
+		<input type="text" id="subject" name="subject" required />
+
+		<label for="body">Message:</label>
+		<textarea id="body" name="body" rows="5" required></textarea>
+
+		<label for="publicPost">
+			<input type="checkbox" id="publicPost" name="publicPost" value="true" />
+			Post this note publicly?
+		</label>
+
+		<input type="hidden" name="sender" value={sender} />
+
+		<input type="submit" value="Send" />
+	</form>
+	)}
+</Layout>
+
+<style>
+	form {
+		background-color: #fff;
+		padding: 20px;
+		border-radius: 8px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		width: 400px; /* Adjust width as needed */
+	}
+
+	h1 {
+		text-align: center;
+		margin-bottom: 20px;
+		color: #333;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 8px;
+		color: #555;
+	}
+
+	input[type='text'],
+	textarea {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-sizing: border-box;
+		margin-bottom: 15px;
+		font-size: 16px;
+	}
+
+	input[type='submit'] {
+		background-color: #007bff; /* Updated button color */
+		color: white;
+		padding: 12px 20px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 16px;
+		transition: background-color 0.3s ease; /* Smooth transition */
+	}
+
+	input[type='submit']:hover {
+		background-color: #0056b3; /* Darker shade on hover */
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 450px) {
+		form {
+			width: 90%;
+		}
+	}
+	.container {
+		animation: 1.2s yeet-move ease-in forwards;
+		animation-delay: 4s;
+		overflow: hidden;
+		top: 0;
+		left: 0;
+		padding: 5rem;
+		position: relative;
+	}
+
+	.envelope {
+		animation: 3.4s 2s yeet ease-in-out forwards;
+		aspect-ratio: 793 / 1200;
+		position: relative;
+		inline-size: 320px;
+		transform-origin: center 80%;
+
+		.image-envelope,
+		.image-flap {
+			inline-size: 100%;
+			inset-block-end: 0;
+			inset-inline: 0;
+			position: absolute;
+		}
+
+		.image-envelope {
+			z-index: 10;
+		}
+
+		.image-flap {
+			animation: 1.6s 0.1s fold ease-in-out forwards;
+			z-index: 5;
+		}
+
+		.image-heart {
+			animation: 2s drop ease-in-out forwards;
+			inline-size: 57.25%;
+			inset-block-start: 0;
+			inset-inline-start: 21.375%;
+			position: absolute;
+			z-index: 1;
+		}
+	}
+
+	@keyframes drop {
+		to {
+			transform: translateY(185%);
+		}
+	}
+
+	@keyframes fold {
+		100% {
+			display: none;
+		}
+	}
+
+	@keyframes yeet {
+		100% {
+			rotate: 4turn;
+		}
+	}
+
+	@keyframes yeet-move {
+		100% {
+			left: 1000px;
+			top: -100px;
+			scale: 0.1;
+		}
+	}
+</style>
